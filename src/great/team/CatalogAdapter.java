@@ -15,10 +15,9 @@ public class CatalogAdapter extends BaseAdapter {
 	private List<Catalog> mCatalogs; // root catalogs
 	private Context mContext;
 
-	public CatalogAdapter(Context c) {
+	public CatalogAdapter(Context c, List<Catalog> catalogs) {
 		mContext = c;
-		DBDataProvider dbProvider= new DBDataProvider(mContext);
-		mCatalogs = dbProvider.getRootCatalogs();
+		mCatalogs = catalogs;
 	}
 
 	@Override

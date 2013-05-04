@@ -95,7 +95,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
         db.execSQL(CREATE_CATALOG_TABLE);
         db.execSQL(CREATE_TERM_TABLE);
         db.execSQL(CREATE_ITEM_TABLE);
-        fillTestData();
+//        fillTestData();
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		return catalogList;
 	}
 	
-	private void fillTestData(){
+	public void fillTestData(){
 		addCatalog(new Catalog(Long.parseLong("11"), Long.parseLong("1"), Long.parseLong("40"), "test1"));
 		addCatalog(new Catalog(Long.parseLong("12"), Long.parseLong("1"), Long.parseLong("40"), "test2"));
 		addCatalog(new Catalog(Long.parseLong("13"), Long.parseLong("1"), Long.parseLong("40"), "test3"));

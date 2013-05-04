@@ -16,8 +16,9 @@ public class MainViewActivity extends Activity {
 
         final View contentView = findViewById(R.id.catalogGridView);
         GridView gv = (GridView)(contentView);
-        
-        gv.setAdapter(new CatalogAdapter(getApplicationContext()));
+		DBDataProvider dbProvider= new DBDataProvider(getApplicationContext());
+		dbProvider.fillTestData();
+		gv.setAdapter(new CatalogAdapter(getApplicationContext(), dbProvider.getRootCatalogs()));
         gv.setNumColumns(2);
     }
 
