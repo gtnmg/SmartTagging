@@ -2,7 +2,6 @@ package great.team;
 
 import great.team.entity.Catalog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -18,13 +17,8 @@ public class CatalogAdapter extends BaseAdapter {
 
 	public CatalogAdapter(Context c) {
 		mContext = c;
-		mCatalogs = new ArrayList<Catalog>();
-		mCatalogs.add(new Catalog(Long.parseLong("11"), Long.parseLong("1"), Long.parseLong("40"), "test1"));
-		mCatalogs.add(new Catalog(Long.parseLong("12"), Long.parseLong("1"), Long.parseLong("40"), "test2"));
-		mCatalogs.add(new Catalog(Long.parseLong("13"), Long.parseLong("1"), Long.parseLong("40"), "test3"));
-		mCatalogs.add(new Catalog(Long.parseLong("14"), Long.parseLong("1"), Long.parseLong("40"), "test4"));
-		mCatalogs.add(new Catalog(Long.parseLong("15"), Long.parseLong("1"), Long.parseLong("40"), "test5"));
-		mCatalogs.add(new Catalog(Long.parseLong("16"), Long.parseLong("1"), Long.parseLong("40"), "test6"));
+		DBDataProvider dbProvider= new DBDataProvider(mContext);
+		mCatalogs = dbProvider.getRootCatalogs();
 	}
 
 	@Override

@@ -45,7 +45,7 @@
         </LinearLayout>
 
         <GridView
-            android:id="@+id/gridView1"
+            android:id="@+id/catalogGridView"
             android:layout_width="match_parent"
             android:layout_height="318dp"
             android:layout_weight="0.83"
