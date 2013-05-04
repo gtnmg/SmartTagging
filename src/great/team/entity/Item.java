@@ -5,6 +5,15 @@ public class Item {
 	private String path;
 	private String comment;
 	
+	public Item(){
+		
+	}
+	
+	public Item(Long id, String path, String comment){
+		this.id = id;
+		this.path = path;
+		this.comment = comment;
+	}
 	public Long getId() {
 		return id;
 	}

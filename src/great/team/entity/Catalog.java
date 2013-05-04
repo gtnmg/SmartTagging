@@ -1,6 +1,14 @@
 package great.team.entity;
 
-public class Catalog {
+import java.io.Serializable;
+
+public class Catalog implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5258438524028368415L;
+
 	private Long id;
 	private long parent_id;
 	private Long weight;

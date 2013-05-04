@@ -42,6 +42,14 @@ public class CatalogAdapter extends BaseAdapter {
 		return position;
 	}
 
+	Catalog getCatalogById(String id){
+		for(Catalog cat : mCatalogs){
+			if(cat.getId().toString().equals(id))
+				return cat;
+		}
+		return null;
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Button but;
@@ -53,12 +61,15 @@ public class CatalogAdapter extends BaseAdapter {
 		}
 
 		but.setText(mCatalogs.get(position).getName());
-//		but.setId((mCatalogs.get(position).getId()));
 		but.setTag(mCatalogs.get(position).getId());
 		but.setOnClickListener( new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(mContext, CatalogOverviewActivity.class);
+				String id = v.getTag().toString();
+				System.out.println("id : " + id);
+				Catalog curCat = getCatalogById(id);
+				intent.putExtra("catalog", curCat);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				mContext.startActivity(intent);
 			}
