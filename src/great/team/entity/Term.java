@@ -4,7 +4,17 @@ public class Term {
 	private Long id;
 	private String name;
 	private Long weight;
+
+	public Term(){
+		
+	}
 	
+	public Term(Long id, String name, Long weight){
+		this.id = id;
+		this.name = name;
+		this.weight = weight;
+	}
+
 	public Long getId() {
 		return id;
 	}

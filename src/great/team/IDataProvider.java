@@ -2,6 +2,7 @@ package great.team;
 
 import great.team.entity.Catalog;
 import great.team.entity.Item;
+import great.team.entity.Term;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface IDataProvider {
 	public List<Catalog> getRootCatalogs();
 	public List<Catalog> getChildCatalogs(Long id);
 	
-	public Long findTermByName (String term);
+	public Term findTermByName (String term);
 
-	public void addTerm(String name, String term, Long catalog_id);
+	public void addTerm(Term term);
 	public void addCatalog(Catalog catalog);
 	
 }
