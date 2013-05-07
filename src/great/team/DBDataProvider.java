@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+// TODO: DBDataProvider singleton
 public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 
 	// Database Version
@@ -66,12 +67,88 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 	public List<Catalog> getChildCatalogs(Long id) {
 		return null;
 	}
+	
+	public Item getItem(Long item_id){
+		String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE " + FIELD_UNIQUE_ID + "= ?";
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { item_id.toString() });
+
+		// looping through all rows and adding to list
+		Item item = new Item();
+		if (cursor.moveToFirst()) {
+			item.setId(Long.parseLong(cursor.getString(0)));
+			item.setPath(cursor.getString(1));
+			item.setComment(cursor.getString(2));
+		}
+		return item;
+	}
+
+	public List<Item> getItems(Long catalog_id, Long term_id){
+		List<Item> items = new ArrayList<Item>();
+		// TODO: make cool query to database from several tables
+		String selectQuery = "SELECT  " + FIELD_DATA_ITEM_ID + " FROM " + TABLE_DATA;
+
+		if(catalog_id != null || term_id != null)
+			selectQuery += " WHERE ";
+		List<String> params = new ArrayList<String>(); 
+		if(catalog_id != null){
+			selectQuery += FIELD_DATA_CATALOG_ID + " = ? ";
+			params.add(catalog_id.toString());
+		}
+		if(term_id != null){
+			if(params.size() > 0)
+				selectQuery += " AND ";
+			selectQuery += FIELD_DATA_TERM_ID + " = ? ";
+			params.add(term_id.toString());
+		}
+		SQLiteDatabase db = this.getReadableDatabase();
+		String []pars = params.toArray(new String[params.size()]);
+		Cursor cursor = db.rawQuery(selectQuery, pars);
+		if (cursor.moveToFirst()) {
+			do {
+				Long item_id = Long.parseLong(cursor.getString(0));
+				Item item = getItem(item_id);
+				items.add(item);
+			} while (cursor.moveToNext());
+		}
+		return items;
+	}
+	
+	public List<Term> getTerms(Long catalog_id){
+		List<Term> termList = new ArrayList<Term>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_TERMS;
+		// TODO: add param to query if cataog_id is not null
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Term term = new Term();
+				term.setId(Long.parseLong(cursor.getString(0)));
+				term.setName(cursor.getString(1));
+				if (cursor.getString(2) != null && !cursor.getString(2).equals(""))
+					term.setWeight(Long.parseLong(cursor.getString(3)));
+				// Adding contact to list
+				termList.add(term);
+			} while (cursor.moveToNext());
+		}
+		// return contact list
+		return termList;
+	}
+	
+	public List<Term> getAllTerms(){
+		return getTerms(null);
+	}
 
 	@Override
 	public Term findTermByName(String term) {
 		String selectQuery = "SELECT  * FROM " + TABLE_TERMS + " WHERE " + FIELD_TERM_NAME + "= ?";
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[] { term });
 
 		// looping through all rows and adding to list
@@ -100,6 +177,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 	
 	public void addItem(Item item, String term, Long catalog_id){
 		SQLiteDatabase db = this.getWritableDatabase();
+		
 		ContentValues itemValues = new ContentValues();
 		itemValues.put(FIELD_UNIQUE_ID, item.getId()); 					// Catalog id
 		itemValues.put(FIELD_ITEM_CONTEXT, item.getComment());			// Catalog parent_id
@@ -108,7 +186,8 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		db.insert(TABLE_ITEMS, null, itemValues);
 		
 		ContentValues dataValues = new ContentValues();
-		dataValues.put(FIELD_UNIQUE_ID, ""); 							// Catalog id
+		String emtyPointer = null;
+		dataValues.put(FIELD_UNIQUE_ID, emtyPointer); 							// Catalog id
 		dataValues.put(FIELD_DATA_ITEM_ID, item.getId());				// Catalog parent_id
 		Term termEntry = findTermByName(term);
 		dataValues.put(FIELD_DATA_TERM_ID, termEntry.getId()); 					// Contact name
@@ -154,6 +233,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
         db.execSQL(CREATE_TERM_TABLE);
         db.execSQL(CREATE_ITEM_TABLE);
         db.execSQL(CREATE_DATA_TABLE);
+        db.close();
 //        fillTestData();
 	}
 
@@ -187,7 +267,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_CATALOGS;
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
@@ -224,11 +304,11 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		addTerm(new Term(Long.valueOf(5), "123", null));
 		addTerm(new Term(Long.valueOf(6), "1", null));
 		
-		addItem(new Item(null, "path1", "item1"), "test", Long.valueOf(1));
-		addItem(new Item(null, "path2", "item2"), "test", Long.valueOf(1));
-		addItem(new Item(null, "path3", "item3"), "testing", Long.valueOf(1));
-		addItem(new Item(null, "path4", "item4"), "testing", Long.valueOf(1));
-		addItem(new Item(null, "path5", "item5"), "ttt", Long.valueOf(2));
-		addItem(new Item(null, "path6", "item6"), "1", Long.valueOf(2));
+		addItem(new Item(Long.valueOf(1), "path1", "item1"), "test", Long.valueOf(1));
+		addItem(new Item(Long.valueOf(2), "path2", "item2"), "test", Long.valueOf(1));
+		addItem(new Item(Long.valueOf(3), "path3", "item3"), "testing", Long.valueOf(1));
+		addItem(new Item(Long.valueOf(4), "path4", "item4"), "testing", Long.valueOf(1));
+		addItem(new Item(Long.valueOf(5), "path5", "item5"), "ttt", Long.valueOf(2));
+		addItem(new Item(Long.valueOf(6), "path6", "item6"), "1", Long.valueOf(2));
 	}
 }
