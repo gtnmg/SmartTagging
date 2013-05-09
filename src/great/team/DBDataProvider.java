@@ -48,6 +48,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
     private static final String FIELD_DATA_CATALOG_ID = "catalog_id";
     private static final String FIELD_DATA_TERM_ID = "term_id";
 
+    
 
     public DBDataProvider(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -198,7 +199,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		db.close(); // Closing database connection
 	}
 
-	
+    
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CATALOG_TABLE = "CREATE TABLE " + TABLE_CATALOGS + 
@@ -233,19 +234,21 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
         db.execSQL(CREATE_TERM_TABLE);
         db.execSQL(CREATE_ITEM_TABLE);
         db.execSQL(CREATE_DATA_TABLE);
-        db.close();
-//        fillTestData();
+       // db.close(); --- doesn't work 
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATALOGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERMS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
-        // Create tables again
-        onCreate(db);	
+		if(newVersion > oldVersion)
+		{
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATALOGS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERMS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
+			// Create tables again
+			onCreate(db);
+		}
     }
 	
 	@Override
