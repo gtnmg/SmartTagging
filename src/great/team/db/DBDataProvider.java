@@ -291,7 +291,6 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 	}
 	
 	public void fillTestData(){
-		onUpgrade(this.getWritableDatabase(), 1, 2);
 		addCatalog(new Catalog(Long.valueOf(1),null, Long.parseLong("40"), "foto"));
 		addCatalog(new Catalog(Long.valueOf(2),null, Long.parseLong("40"), "video"));
 		addCatalog(new Catalog(Long.valueOf(3),null, Long.parseLong("40"), "documents"));
