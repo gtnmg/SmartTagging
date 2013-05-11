@@ -18,33 +18,14 @@
          android:fitsSystemWindows.
 
     -->
-    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+		<include layout="@layout/autocomplete_term_layout"/>
 
-            <AutoCompleteTextView
-                android:id="@+id/term_autocomplete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <!-- requestFocus /-->
-            </AutoCompleteTextView>
-
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-        </LinearLayout>
-
-        <GridView
+		<GridView
             android:id="@+id/catalogGridView"
             android:layout_width="match_parent"
             android:layout_height="318dp"

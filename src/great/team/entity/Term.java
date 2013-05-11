@@ -1,6 +1,14 @@
 package great.team.entity;
 
-public class Term {
+import java.io.Serializable;
+
+public class Term  implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4957843424126698456L;
+	
 	private Long id;
 	private String name;
 	private Long weight;

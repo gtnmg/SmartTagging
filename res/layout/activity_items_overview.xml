@@ -3,6 +3,8 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <include layout="@layout/autocomplete_term_layout"/>
+    
     <ListView
         android:id="@+id/itemsListView"
         android:layout_width="match_parent"
