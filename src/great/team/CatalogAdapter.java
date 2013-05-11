@@ -1,5 +1,6 @@
 package great.team;
 
+import great.team.activities.ItemsOverviewActivity;
 import great.team.entity.Catalog;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class CatalogAdapter extends BaseAdapter {
 		but.setOnClickListener( new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, CatalogOverviewActivity.class);
+				Intent intent = new Intent(mContext, ItemsOverviewActivity.class);
 				String id = v.getTag().toString();
 				System.out.println("id : " + id);
 				Catalog curCat = getCatalogById(id);
