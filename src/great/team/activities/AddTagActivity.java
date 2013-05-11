@@ -1,5 +1,7 @@
-package great.team;
+package great.team.activities;
 
+import great.team.R;
+import great.team.R.id;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

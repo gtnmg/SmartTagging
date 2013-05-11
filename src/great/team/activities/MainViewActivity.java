@@ -1,5 +1,9 @@
-package great.team;
+package great.team.activities;
 
+import great.team.CatalogAdapter;
+import great.team.R;
+import great.team.R.id;
+import great.team.R.layout;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="great.team.MainViewActivity"
+            android:name="great.team.activities.MainViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name" >
 
@@ -27,9 +27,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="great.team.ItemsOverviewActivity"
+            android:name="great.team.activities.ItemsOverviewActivity"
             android:label="@string/title_activity_catalog_overview"
-            android:parentActivityName="great.team.MainViewActivity" >
+            android:parentActivityName="great.team.activities.MainViewActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="great.team.MainViewActivity" />

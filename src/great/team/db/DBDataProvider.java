@@ -137,7 +137,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 		return termList;
 	}
 
-	
+	@Override
 	public List<String> getTerms(){
 		return getTerms(null);
 	}
@@ -245,6 +245,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider{
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
 			// Create tables again
 			onCreate(db);
+			fillTestData();
 		}
     }
 	
