@@ -11,5 +11,6 @@
     <string name="search_term_submit">Search</string>
     <string name="search_term_input">Enter term</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_add_tag">AddTagActivity</string>
 
 </resources>

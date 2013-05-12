@@ -1,7 +1,6 @@
 package great.team.activities;
 
 import great.team.R;
-import great.team.R.id;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,14 +12,16 @@ public class AddTagActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		  Button button = (Button)findViewById(R.id.btnAddTerm);
-	      button.setOnClickListener(new View.OnClickListener() {
+		setContentView(R.layout.activity_add_file);
+/*
+		Button button = (Button)findViewById(R.id.btnSelectCatalog);
+	    button.setOnClickListener(new View.OnClickListener() {
 
 	          public void onClick(View v) {
 	              openSelectionCatalogDialog();
 	          }
 	      });
-
+*/
 	}
 	
 private void openSelectionCatalogDialog() {

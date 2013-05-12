@@ -4,6 +4,7 @@ import great.team.CatalogAdapter;
 import great.team.R;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
+import great.team.listener.AddTagListener;
 
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class MainViewActivity extends Activity implements View.OnClickListener{
 		autoComplete.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, strTerms.toArray(new String [strTerms.size()])));
 
+		Button but=(Button) findViewById(R.id.btnAddFileItem);
+		but.setOnClickListener(new AddTagListener(getApplicationContext()));
+				
 	}
 
 	@Override
