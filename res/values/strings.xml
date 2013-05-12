@@ -12,5 +12,7 @@
     <string name="search_term_input">Enter term</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_add_tag">AddTagActivity</string>
+    <string name="title_activity_android_tab_layout">AndroidTabLayoutActivity</string>
+    <string name="title_activity_main_tab_layout">MainTabLayoutActivity</string>
 
 </resources>

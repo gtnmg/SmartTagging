@@ -14,17 +14,20 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="great.team.activities.MainViewActivity"
+            android:name="great.team.activities.MainTabLayoutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name" >
 
             <!-- android:theme="@style/FullscreenTheme" -->
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="great.team.activities.MainViewActivity"
+            android:label="@string/title_activity_catalog_overview" >
         </activity>
         <activity
             android:name="great.team.activities.ItemsOverviewActivity"
@@ -35,12 +38,20 @@
                 android:value="great.team.MainViewActivity" />
         </activity>
         <activity
-            android:name="great.team.activities.AddTagActivity"
-            android:label="@string/title_activity_add_tag" >
-                        <meta-data
+            android:name="great.team.activities.TermsOverviewActivity"
+            android:label="@string/title_activity_main_tab_layout"
+            android:parentActivityName="great.team.activities.MainViewActivity" >
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="great.team.MainViewActivity" />
-            
+        </activity>
+
+        <activity
+            android:name="great.team.activities.AddTagActivity"
+            android:label="@string/title_activity_add_tag" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="great.team.MainViewActivity" />
         </activity>
     </application>
 

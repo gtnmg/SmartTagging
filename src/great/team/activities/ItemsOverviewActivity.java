@@ -30,13 +30,15 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_items_overview);
 		Bundle bundle = getIntent().getExtras();
-
-		Catalog cat = (Catalog)bundle.get("catalog");
-		if(cat != null)
-			mCatalogId = cat.getId();
-		Term term = (Term)bundle.get("term");
-		if(term != null)
-			mTermId = term.getId();
+		
+		if(bundle != null){
+			Catalog cat = (Catalog)bundle.get("catalog");
+			if(cat != null)
+				mCatalogId = cat.getId();
+			Term term = (Term)bundle.get("term");
+			if(term != null)
+				mTermId = term.getId();
+		}
 
 		itemsListView = (ListView)findViewById(R.id.itemsListView);
 		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());

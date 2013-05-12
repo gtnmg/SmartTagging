@@ -53,7 +53,7 @@ public class CatalogAdapter extends BaseAdapter {
 		} else {
 			but = (Button) convertView;
 		}
-
+		but.setHeight(130);
 		but.setText(mCatalogs.get(position).getName());
 		but.setTag(mCatalogs.get(position).getId());
 		but.setOnClickListener( new View.OnClickListener() {
