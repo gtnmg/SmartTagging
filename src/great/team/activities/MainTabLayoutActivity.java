@@ -1,10 +1,16 @@
 package great.team.activities;
 
 import great.team.R;
+import android.app.ActionBar;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -48,4 +54,30 @@ public class MainTabLayoutActivity extends TabActivity {
 		//set Windows tab as default (zero based)
 		tabHost.setCurrentTab(0);
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		ActionBar bar = getActionBar();
+		bar.setBackgroundDrawable(new ColorDrawable(Color.BLUE));
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_main_tab_layout, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_add_item:
+			Intent intent = new Intent(getApplicationContext(), AddTagActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			getApplicationContext().startActivity(intent);
+			break;
+		case R.id.action_search_term:
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+
 }
