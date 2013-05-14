@@ -1,7 +1,7 @@
 package great.team.activities;
 
-import great.team.ItemsArrayAdapter;
 import great.team.R;
+import great.team.adapters.ItemsArrayAdapter;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 import great.team.entity.Catalog;

@@ -1,4 +1,4 @@
-package great.team;
+package great.team.adapters;
 
 import great.team.activities.ItemsOverviewActivity;
 import great.team.entity.Catalog;

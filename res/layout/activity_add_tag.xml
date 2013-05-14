@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+    <Spinner
+        android:id="@+id/spinnerSelectCatalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    
+	<include layout="@layout/autocomplete_term_layout"/>
+
+	<EditText
+	    android:id="@+id/editText2"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:ems="10"
+	    android:text="will be list of terms" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10" 
+            android:text="will be file Path">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select file" />
+
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/edtAddedTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" 
+        android:text="Comment to file"/>
+
+    <Button
+        android:id="@+id/btnSelectCatalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="add Item" />
+</LinearLayout>

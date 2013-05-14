@@ -1,21 +1,32 @@
 package great.team.activities;
 
 import great.team.R;
+import great.team.adapters.CatalogSpinnerAdapter;
+import great.team.db.DataProviderFactory;
+import great.team.db.IDataProvider;
+import great.team.entity.Catalog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 public class AddTagActivity extends Activity { 
 
 
+	private Catalog mCurrentCatalog;
+	private CatalogSpinnerAdapter mCatalogSpinnerAdapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_file);
+		setContentView(R.layout.activity_add_tag);
 		
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -34,15 +45,22 @@ public class AddTagActivity extends Activity {
 	    } else {
 	        // Handle other intents, such as being started from the home screen
 	    }
-/*
-		Button button = (Button)findViewById(R.id.btnSelectCatalog);
-	    button.setOnClickListener(new View.OnClickListener() {
+	    
+	    IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
+	    List<Catalog> catalogs = dataProvider.getRootCatalogs();
+	    Spinner spinnerSelectCatalog = (Spinner) findViewById(R.id.spinnerSelectCatalog);
+	    mCatalogSpinnerAdapter = new CatalogSpinnerAdapter(getApplicationContext(), catalogs);
+	    spinnerSelectCatalog.setAdapter(mCatalogSpinnerAdapter);
+	    spinnerSelectCatalog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                    int position, long id) {
+            	mCurrentCatalog = mCatalogSpinnerAdapter.getItem(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {  }
+        });
 
-	          public void onClick(View v) {
-	              openSelectionCatalogDialog();
-	          }
-	      });
-*/
 	}
 
 	void handleSendText(Intent intent) {

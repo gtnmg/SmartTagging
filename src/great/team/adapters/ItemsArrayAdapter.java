@@ -1,5 +1,8 @@
-package great.team;
+package great.team.adapters;
 
+import great.team.R;
+import great.team.R.id;
+import great.team.R.layout;
 import great.team.entity.Item;
 
 import java.util.List;
