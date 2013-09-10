@@ -5,9 +5,6 @@ import great.team.adapters.CatalogAdapter;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 import great.team.listener.AddTagListener;
-
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,14 +30,14 @@ public class MainViewActivity extends Activity implements View.OnClickListener{
 				.getRootCatalogs()));
 		gv.setNumColumns(2);
 
-		List<String> strTerms = dataProvider.getTerms();
+		String[] strTerms = dataProvider.getTerms(null);
 
 		AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
 		Button searchTermBtn = (Button) findViewById(R.id.search_term_button);
 		searchTermBtn.setOnClickListener(this);
 
 		autoComplete.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, strTerms.toArray(new String [strTerms.size()])));
+				android.R.layout.simple_dropdown_item_1line, strTerms));
 
 		Button but=(Button) findViewById(R.id.btnAddFileItem);
 		but.setOnClickListener(new AddTagListener(getApplicationContext()));

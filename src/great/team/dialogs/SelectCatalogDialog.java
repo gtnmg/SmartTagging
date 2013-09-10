@@ -1,4 +1,4 @@
-package dialogs;
+package great.team.dialogs;
 
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;

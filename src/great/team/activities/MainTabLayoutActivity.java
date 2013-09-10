@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
-// TODO: use not deprecated class for tabs
+// TODO: remove this epta
 public class MainTabLayoutActivity extends TabActivity {
 
 	@Override

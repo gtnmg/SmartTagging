@@ -22,7 +22,7 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 
 	private ListView itemsListView;
 	List<Item> itemList;
-	Long mCatalogId = null;
+	Catalog mCatalog = null;
 	Long mTermId = null;
 
 	@Override
@@ -32,9 +32,7 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 		Bundle bundle = getIntent().getExtras();
 		
 		if(bundle != null){
-			Catalog cat = (Catalog)bundle.get("catalog");
-			if(cat != null)
-				mCatalogId = cat.getId();
+			mCatalog = (Catalog)bundle.get("catalog");
 			Term term = (Term)bundle.get("term");
 			if(term != null)
 				mTermId = term.getId();
@@ -42,14 +40,14 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 
 		itemsListView = (ListView)findViewById(R.id.itemsListView);
 		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
-		itemList = dataProvider.getItems( mCatalogId , mTermId );
+		itemList = dataProvider.getItems( mCatalog.getId() , mTermId );
 		ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
 		itemsListView.setAdapter(itemsArrayAdapter);
 
-		List<String> strTerms = dataProvider.getTerms(mCatalogId);
+		String[] strTerms = dataProvider.getTerms(mCatalog);
 		AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
 		autoComplete.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, strTerms.toArray(new String [strTerms.size()])));
+				android.R.layout.simple_dropdown_item_1line, strTerms));
 
 		Button searchTermBtn = (Button) findViewById(R.id.search_term_button);
 		searchTermBtn.setOnClickListener(this);
@@ -65,12 +63,11 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 				Term term = dataProvider.findTermByName(termName);
 				if(term !=null)
 					mTermId = term.getId();
-				itemList = dataProvider.getItems( mCatalogId , mTermId );
+				itemList = dataProvider.getItems( mCatalog.getId() , mTermId );
 				ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
 				itemsListView.setAdapter(itemsArrayAdapter);
 				break;
 		}
-		
 	}
 
 }
