@@ -11,10 +11,8 @@ public interface IDataProvider {
 	public Item getItem(Long item_id);
 		
 	public List<Catalog> getRootCatalogs();
-	public List<Catalog> getChildCatalogs(Long id);
-
-	public List<String> getTerms(Long catalog_id);
-	public List<String> getTerms();
+	
+	public String[] getTerms(Catalog cat);
 	
 	public Term findTermByName (String term);
 
