@@ -40,7 +40,7 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 
 		itemsListView = (ListView)findViewById(R.id.itemsListView);
 		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
-		itemList = dataProvider.getItems( mCatalog.getId() , mTermId );
+		itemList = dataProvider.getItems( mCatalog , mTermId );
 		ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
 		itemsListView.setAdapter(itemsArrayAdapter);
 
@@ -63,7 +63,7 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 				Term term = dataProvider.findTermByName(termName);
 				if(term !=null)
 					mTermId = term.getId();
-				itemList = dataProvider.getItems( mCatalog.getId() , mTermId );
+				itemList = dataProvider.getItems( mCatalog , mTermId );
 				ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
 				itemsListView.setAdapter(itemsArrayAdapter);
 				break;

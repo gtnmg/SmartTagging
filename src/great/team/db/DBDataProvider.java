@@ -72,18 +72,18 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 	}
 
 	@Override
-	public List<Item> getItems(Long catalog_id, Long term_id) {
+	public List<Item> getItems(Catalog cat, Long term_id) {
 		List<Item> items = new ArrayList<Item>();
 		// TODO: make cool query to database from several tables
 		String selectQuery = "SELECT  " + FIELD_DATA_ITEM_ID + " FROM "
 				+ TABLE_DATA;
 
-		if (catalog_id != null || term_id != null)
+		if (cat != null || term_id != null)
 			selectQuery += " WHERE ";
 		List<String> params = new ArrayList<String>();
-		if (catalog_id != null) {
+		if (cat != null && cat.getId() != null) {
 			selectQuery += FIELD_DATA_CATALOG_ID + " = ? ";
-			params.add(catalog_id.toString());
+			params.add(cat.getId().toString());
 		}
 		if (term_id != null) {
 			if (params.size() > 0)

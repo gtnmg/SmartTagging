@@ -7,7 +7,7 @@ import great.team.entity.Term;
 import java.util.List;
 
 public interface IDataProvider {
-	public List<Item> getItems(Long catalog_id, Long term_id);
+	public List<Item> getItems(Catalog cat, Long term_id);
 	public Item getItem(Long item_id);
 		
 	public List<Catalog> getRootCatalogs();
