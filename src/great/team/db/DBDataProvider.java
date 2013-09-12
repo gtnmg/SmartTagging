@@ -268,6 +268,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 			} while (cursor.moveToNext());
 		}
 		// return contact list
+		
 		return catalogList;
 	}
 

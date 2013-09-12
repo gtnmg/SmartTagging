@@ -1,30 +1,26 @@
 package great.team.activities;
 
 import great.team.R;
+import great.team.adapters.TermsAdapter;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
-import great.team.entity.Term;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
-public class TermsOverviewActivity extends Activity implements OnClickListener{
+public class TermsOverviewActivity extends Activity implements OnClickListener {
 
-	ListView mTermsListView;
+	GridView mGvTerms;
 	Button mBtnSelectCatalog;
+	Button mBtnCancel;
 	TextView mSelectedCatalog;
 	Catalog mCurrentCatalog = null;
-	
 
 	private String[] getTerms() {
 		IDataProvider dataProvider = DataProviderFactory
@@ -32,25 +28,22 @@ public class TermsOverviewActivity extends Activity implements OnClickListener{
 		return dataProvider.getTerms(mCurrentCatalog);
 	}
 
-	private void init() {
-		mTermsListView = (ListView) findViewById(R.id.terms_list_view);
+	private void refreshView() {
+		mGvTerms.setAdapter(new TermsAdapter(getApplicationContext(),getTerms()));
+	}
 
-		mTermsListView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, getTerms()));
-		mTermsListView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View view,
-					int position, long id) {
-				String termName = ((TextView) view).getText().toString();
-				Term term = DataProviderFactory.getDataProvider(
-						getApplicationContext()).findTermByName(termName);
-				Intent i = new Intent(getApplicationContext(),
-						ItemsOverviewActivity.class);
-				i.putExtra("term", term);
-				startActivity(i);
-			}
-		});
-		mSelectedCatalog = (TextView)findViewById(R.id.tvSelectedCatalog);
+	private void setCatalogLabel() {
+		mSelectedCatalog.setText(mCurrentCatalog == null ? "" : "Catalog:"
+				+ mCurrentCatalog.getName());
+	}
+
+	private void init() {
+		mGvTerms = (GridView) findViewById(R.id.gvTerms);
+		refreshView();
+		mSelectedCatalog = (TextView) findViewById(R.id.tvSelectedCatalog);
 		mBtnSelectCatalog = (Button) findViewById(R.id.btnCatalogSelect);
+		mBtnCancel = (Button) findViewById(R.id.btnClearCatalogSelection);
+		mBtnCancel.setOnClickListener(this);
 		mBtnSelectCatalog.setOnClickListener(this);
 	}
 
@@ -62,10 +55,14 @@ public class TermsOverviewActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		if(v==mBtnSelectCatalog)
-		{
+		if (v == mBtnSelectCatalog) {
 			mCurrentCatalog = SelectCatalogDialog.execute(this);
-			mSelectedCatalog.setText(mCurrentCatalog==null?"":mCurrentCatalog.getName());
+			setCatalogLabel();
+			refreshView();
+		} else if (v == mBtnCancel) {
+			mCurrentCatalog = null;
+			setCatalogLabel();
+			refreshView();
 		}
 	}
 

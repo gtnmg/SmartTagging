@@ -22,10 +22,9 @@
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView1"
-                android:layout_width="138dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="AutoCompleteTextView" >
+                android:ems="10" >
 
                 <requestFocus />
             </AutoCompleteTextView>
@@ -38,28 +37,28 @@
                 android:text="Button" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/terms_list_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ListView>
+        <GridView
+            android:id="@+id/gvTerms"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:numColumns="3" >
+        </GridView>
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_weight="1" >
 
             <TextView
                 android:id="@+id/tvSelectedCatalog"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+            />
 
             <Button
-                android:id="@+id/Button01"
+                android:id="@+id/btnClearCatalogSelection"
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+                android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:text="x" />
 
@@ -69,7 +68,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="..." />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

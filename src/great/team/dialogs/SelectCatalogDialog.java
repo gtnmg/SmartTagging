@@ -44,8 +44,10 @@ public class SelectCatalogDialog {
 		Builder builder = new AlertDialog.Builder(act);
 		builder.setTitle("Select catalog"); // TODO: localization
 		builder.setCancelable(false);
+	
 		builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
+				mSelectedCatalog = null;
 				dialog.cancel();
 			}
 		});
@@ -53,6 +55,7 @@ public class SelectCatalogDialog {
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 						mSelectedCatalog = mCatalogs.get(item);
+						dialog.cancel();
 					}
 				});
 		return builder;
