@@ -3,6 +3,7 @@ package great.team.dialogs;
 import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 import great.team.entity.Catalog;
+import great.team.interfaces.ICatalogSetter;
 
 import java.util.List;
 
@@ -13,8 +14,17 @@ import android.content.DialogInterface;
 
 public class SelectCatalogDialog {
 	private static List<Catalog> mCatalogs = null;
-	private Catalog mSelectedCatalog;
+	private ICatalogSetter mSetter;
 
+	public SelectCatalogDialog(ICatalogSetter setter) { // here we should pass some activity wich implement ICatalogSetter
+		mSetter = null;
+		if( setter instanceof Activity )
+		{
+			mSetter = setter;
+			Activity act = (Activity)mSetter;
+			createDialog(act).show();
+		}
+	}
 	public static void reloadData() {
 		mCatalogs = null;
 	}
@@ -36,7 +46,6 @@ public class SelectCatalogDialog {
 					.getDataProvider(act.getApplicationContext());
 			mCatalogs = dataProvider.getRootCatalogs();
 		}
-		mSelectedCatalog = null;
 	}
 
 	private Builder createDialog(Activity act) {
@@ -45,26 +54,18 @@ public class SelectCatalogDialog {
 		builder.setTitle("Select catalog"); // TODO: localization
 		builder.setCancelable(false);
 	
-		builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				mSelectedCatalog = null;
-				dialog.cancel();
-			}
-		});
 		builder.setSingleChoiceItems(getCatalogNames(), -1,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						mSelectedCatalog = mCatalogs.get(item);
+						mSetter.setCatalog(mCatalogs.get(item));
+						mSetter=null;
 						dialog.cancel();
 					}
 				});
 		return builder;
 	}
-
-	public static Catalog execute(Activity activity) 
-	{
-		SelectCatalogDialog dialog = new SelectCatalogDialog();
-		dialog.createDialog(activity).show();
-	    return dialog.mSelectedCatalog;
+    
+	public static void execute(ICatalogSetter setter) {
+		new SelectCatalogDialog(setter);
 	}
 }

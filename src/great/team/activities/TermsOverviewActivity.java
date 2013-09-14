@@ -6,6 +6,7 @@ import great.team.db.DataProviderFactory;
 import great.team.db.IDataProvider;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
+import great.team.interfaces.ICatalogSetter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
-public class TermsOverviewActivity extends Activity implements OnClickListener {
+public class TermsOverviewActivity extends Activity implements OnClickListener, ICatalogSetter {
 
 	GridView mGvTerms;
 	Button mBtnSelectCatalog;
@@ -56,14 +57,16 @@ public class TermsOverviewActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v == mBtnSelectCatalog) {
-			mCurrentCatalog = SelectCatalogDialog.execute(this);
-			setCatalogLabel();
-			refreshView();
+			SelectCatalogDialog.execute(this);
 		} else if (v == mBtnCancel) {
 			mCurrentCatalog = null;
 			setCatalogLabel();
 			refreshView();
 		}
 	}
-
+	public void setCatalog(Catalog cat) {
+		mCurrentCatalog = cat;
+		setCatalogLabel();
+		refreshView();
+	}
 }
