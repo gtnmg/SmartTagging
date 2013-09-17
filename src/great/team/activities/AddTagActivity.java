@@ -1,11 +1,13 @@
 package great.team.activities;
 
 import great.team.R;
-import great.team.adapters.CatalogSpinnerAdapter;
-import great.team.db.DataProviderFactory;
-import great.team.db.IDataProvider;
+import great.team.adapters.SelectedFilePathsAdapter;
+import great.team.dialogs.OpenFileDialog;
+import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
+import great.team.interfaces.ICatalogSetter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +16,44 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class AddTagActivity extends Activity { 
+public class AddTagActivity extends Activity implements OnClickListener, ICatalogSetter, OpenFileDialog.OnFileSelectedListener { 
 
 
 	private Catalog mCurrentCatalog;
-	private CatalogSpinnerAdapter mCatalogSpinnerAdapter;
+	Button mBtnSelectCatalog;
+	Button mBtnOpenFileDialog;
+	TextView mTvSelectedCatalog;
+	OpenFileDialog mOpenFileDialog;
+
+	ListView mLstSelectedFilePaths;
+	List<String> mSelectedFilePaths = null;
+	SelectedFilePathsAdapter mSelectedFilePathAdapter = null;
+
+	void init(){
+		mTvSelectedCatalog = (TextView) findViewById(R.id.tvSelectedCatalog);
+		mBtnSelectCatalog = (Button) findViewById(R.id.btnCatalogSelect);
+		mBtnSelectCatalog.setOnClickListener(this);
+		mBtnOpenFileDialog = (Button) findViewById(R.id.btnOpenFileDialog);
+		mBtnOpenFileDialog.setOnClickListener(this);
+		mOpenFileDialog = new OpenFileDialog(this, null, null, this);
+		
+		mSelectedFilePaths = new ArrayList<String>();
+		mSelectedFilePathAdapter = new SelectedFilePathsAdapter(this, mSelectedFilePaths);
+		mLstSelectedFilePaths = (ListView) findViewById(R.id.lst_selected_file_paths);
+		mLstSelectedFilePaths.setAdapter(mSelectedFilePathAdapter);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_tag);
+		
+		init();
 		
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -45,22 +72,6 @@ public class AddTagActivity extends Activity {
 	    } else {
 	        // Handle other intents, such as being started from the home screen
 	    }
-	    
-	    IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
-	    List<Catalog> catalogs = dataProvider.getRootCatalogs();
-	    Spinner spinnerSelectCatalog = (Spinner) findViewById(R.id.spinnerSelectCatalog);
-	    mCatalogSpinnerAdapter = new CatalogSpinnerAdapter(getApplicationContext(), catalogs);
-	    spinnerSelectCatalog.setAdapter(mCatalogSpinnerAdapter);
-	    spinnerSelectCatalog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view,
-                    int position, long id) {
-            	mCurrentCatalog = mCatalogSpinnerAdapter.getItem(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
-        });
-
 	}
 
 	void handleSendText(Intent intent) {
@@ -95,5 +106,31 @@ public class AddTagActivity extends Activity {
 		 * onClick(DialogInterface dialoginterface, int i) { //startGame(i); }
 		 * }) .show();
 		 */
+	}
+
+	@Override
+	public void setCatalog(Catalog cat) {
+		mCurrentCatalog = cat;
+		mTvSelectedCatalog.setText(cat.getName());
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == mBtnSelectCatalog) {
+			SelectCatalogDialog.execute(this);
+		} else if(v == mBtnOpenFileDialog ){
+			try{
+				mOpenFileDialog.show();
+			} catch (Exception ex){
+				ex.printStackTrace();
+			}
+		}
+		
+	}
+	@Override
+	public void onFileSelected(File f) {
+		String filePath = f.getAbsolutePath();
+		mSelectedFilePathAdapter.add(filePath);
+		mSelectedFilePathAdapter.notifyDataSetChanged();
 	}
 }

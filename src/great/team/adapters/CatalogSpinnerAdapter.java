@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+//TODO: remove this adapter??
 public class CatalogSpinnerAdapter extends ArrayAdapter<Catalog>{
 
     private final Context mContext;
