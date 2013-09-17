@@ -9,7 +9,7 @@
         android:layout_marginLeft="4px"
         android:layout_marginRight="10px"
         android:layout_marginTop="4px"
-        android:src="@drawable/ic_launcher" >
+        android:src="@drawable/ic_ofd_file" >
     </ImageView>
 
     <TextView

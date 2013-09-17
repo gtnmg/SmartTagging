@@ -47,6 +47,7 @@ public class TermsAdapter extends BaseAdapter {
 				Term term = DataProviderFactory.getDataProvider(mContext).findTermByName(
 								termName);
 				intent.putExtra("term", term);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				mContext.startActivity(intent);
 			}
 		});
