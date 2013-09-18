@@ -18,5 +18,5 @@ public interface IDataProvider {
 
 	public void addTerm(Term term);
 	public void addCatalog(Catalog catalog);
-	
+	public void addItem(Item item, String term, Long catalog_id);
 }

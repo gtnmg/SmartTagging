@@ -2,6 +2,8 @@ package great.team.activities;
 
 import great.team.R;
 import great.team.adapters.SelectedFilePathsAdapter;
+import great.team.db.DataProviderFactory;
+import great.team.db.IDataProvider;
 import great.team.dialogs.OpenFileDialog;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
@@ -15,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,23 +32,43 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 	Button mBtnOpenFileDialog;
 	TextView mTvSelectedCatalog;
 	OpenFileDialog mOpenFileDialog;
+	TextView mTvItemTags;
+	Button mBtnSaveItems;
+	IDataProvider mDataProvider;
 
 	ListView mLstSelectedFilePaths;
 	List<String> mSelectedFilePaths = null;
 	SelectedFilePathsAdapter mSelectedFilePathAdapter = null;
 
+	boolean addUriToFileList(String uri){
+		if(mSelectedFilePathAdapter.getPosition(uri) == -1){ // check if uri already exists
+			mSelectedFilePathAdapter.add(uri);
+			return true;
+		}
+		return false;
+
+	}
+	
 	void init(){
 		mTvSelectedCatalog = (TextView) findViewById(R.id.tvSelectedCatalog);
 		mBtnSelectCatalog = (Button) findViewById(R.id.btnCatalogSelect);
 		mBtnSelectCatalog.setOnClickListener(this);
+		
+		mOpenFileDialog = new OpenFileDialog(this, null, null, this);
 		mBtnOpenFileDialog = (Button) findViewById(R.id.btnOpenFileDialog);
 		mBtnOpenFileDialog.setOnClickListener(this);
-		mOpenFileDialog = new OpenFileDialog(this, null, null, this);
 		
 		mSelectedFilePaths = new ArrayList<String>();
 		mSelectedFilePathAdapter = new SelectedFilePathsAdapter(this, mSelectedFilePaths);
 		mLstSelectedFilePaths = (ListView) findViewById(R.id.lst_selected_file_paths);
 		mLstSelectedFilePaths.setAdapter(mSelectedFilePathAdapter);
+
+
+		mTvItemTags = (TextView) findViewById(R.id.edt_item_tags);
+		mBtnSaveItems = (Button)findViewById(R.id.btnSaveItems);
+		mBtnSaveItems.setOnClickListener(this);
+		
+		mDataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
 	}
 
 	@Override
@@ -84,28 +107,22 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 	void handleSendImage(Intent intent) {
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
 	    if (imageUri != null) {
-	        // Update UI to reflect image being shared
+			if(addUriToFileList(imageUri.getPath()))
+				mSelectedFilePathAdapter.notifyDataSetChanged();
 	    }
 	}
 
 	void handleSendMultipleImages(Intent intent) {
 	    ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
 	    if (imageUris != null) {
-	        // Update UI to reflect multiple images being shared
+			boolean bImagesAdded = false;
+			for(Uri imageUri : imageUris){
+				if(addUriToFileList(imageUri.getPath()))
+					bImagesAdded = true;
+			}
+			if(bImagesAdded)
+				mSelectedFilePathAdapter.notifyDataSetChanged();
 	    }
-	}
-
-	private void openSelectionCatalogDialog() {
-
-		// ArrayList<String> items = DBDataProvider.
-		/*
-		 * TODO: read catalog items from dbprovider new
-		 * AlertDialog.Builder(this) .setTitle("R.string.dialog_title")
-		 * .setItems("R.array.dialog_values", new
-		 * DialogInterface.OnClickListener() { public void
-		 * onClick(DialogInterface dialoginterface, int i) { //startGame(i); }
-		 * }) .show();
-		 */
 	}
 
 	@Override
@@ -124,13 +141,27 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 			} catch (Exception ex){
 				ex.printStackTrace();
 			}
+		} else if(v == mBtnSaveItems){
+			String strItemTags = mTvItemTags.getText().toString();
+			if(strItemTags == null  || strItemTags.isEmpty() || mSelectedFilePathAdapter.getCount() == 0 || mCurrentCatalog == null)
+				return;
+			String itemTags []= strItemTags.trim().split("\\s*,\\s*");
+			for(int i = 0; i < itemTags.length; i ++){
+				for(int j = 0; j < mSelectedFilePathAdapter.getCount(); j++){
+					String test1 = itemTags[i];
+					String test2 = mSelectedFilePathAdapter.getItem(j);
+					Log.d(this.toString(), "catalog: " + mCurrentCatalog + " tag: " + test1 + " filePath: " + test2 );
+					//mDataProvider.addItem(item, term, catalog_id);
+				}
+			}
+			
 		}
 		
 	}
 	@Override
 	public void onFileSelected(File f) {
 		String filePath = f.getAbsolutePath();
-		mSelectedFilePathAdapter.add(filePath);
-		mSelectedFilePathAdapter.notifyDataSetChanged();
+		if(addUriToFileList(filePath))
+			mSelectedFilePathAdapter.notifyDataSetChanged();
 	}
 }

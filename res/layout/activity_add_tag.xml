@@ -15,7 +15,7 @@
             <TextView
                 android:id="@+id/tvSelectedCatalog"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <Button
                 android:id="@+id/btnCatalogSelect"
@@ -27,10 +27,12 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <include
+    <EditText
+        android:id="@+id/edt_item_tags"
         android:layout_width="match_parent"
-        layout="@layout/autocomplete_term_layout" />
-
+        android:layout_height="wrap_content"
+        android:hint="Enter tags (tag1,tag2)" /> 
+    
     <ListView
         android:id="@+id/lst_selected_file_paths"
         android:layout_width="match_parent"
@@ -51,9 +53,9 @@
         android:text="Comment to file" />
 
     <Button
-        android:id="@+id/btnSelectCatalog"
+        android:id="@+id/btnSaveItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add Item" />
+        android:text="Save" />
 
 </LinearLayout>
