@@ -15,8 +15,10 @@ public interface IDataProvider {
 	public String[] getTerms(Catalog cat);
 	
 	public Term findTermByName (String term);
+	public Item findItemByFileURI(String fileUri);
 
-	public void addTerm(Term term);
-	public void addCatalog(Catalog catalog);
-	public void addItem(Item item, String term, Long catalog_id);
+	public Long addTerm(Term term);
+	public Long addCatalog(Catalog catalog);
+	public Long addItem(Item item);
+	public Long addData(Long item_id, Long term_id, Long cataog_id);
 }

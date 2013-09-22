@@ -46,11 +46,11 @@
         android:text="Select file" />
 
     <EditText
-        android:id="@+id/edtAddedTags"
+        android:id="@+id/edt_item_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="Comment to file" />
+        android:hint="Comment to file" />
 
     <Button
         android:id="@+id/btnSaveItems"

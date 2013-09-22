@@ -104,7 +104,7 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		ActionBar bar = getActionBar();
-		bar.setBackgroundDrawable(new ColorDrawable(Color.BLUE));
+//		bar.setBackgroundDrawable(new ColorDrawable(Color.BLUE));
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main_tab_layout, menu);
 		return true;
@@ -118,10 +118,10 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			getApplicationContext().startActivity(intent);
 			break;
-		case R.id.action_search_term:
+/*		case R.id.action_search_term:
 			break;
 		default:
-			break;
+			break;*/
 		}
 		return true;
 	}

@@ -50,6 +50,7 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 
 	public DBDataProvider(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		//fillTestData();
 	}
 
 	@Override
@@ -142,51 +143,41 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 		Cursor cursor = db.rawQuery(selectQuery, new String[] { term });
 
 		// looping through all rows and adding to list
-		Term termEntry = new Term();
 		if (cursor.moveToFirst()) {
+			Term termEntry = new Term();
 			termEntry.setId(Long.parseLong(cursor.getString(0)));
 			termEntry.setName(cursor.getString(1));
 			if (cursor.getString(2) != null && !cursor.getString(2).equals(""))
 				termEntry.setWeight(Long.parseLong(cursor.getString(3)));
+			return termEntry;
 		}
 		// return contact list
-		return termEntry;
+		return null;
 	}
 
 	@Override
-	public void addTerm(Term term) {
+	public Long addTerm(Term term) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(FIELD_UNIQUE_ID, term.getId()); // Catalog id
 		values.put(FIELD_TERM_NAME, term.getName()); // Catalog parent_id
 		values.put(FIELD_TERM_WEIGHT, term.getWeight()); // Contact name
 		// Inserting Row
-		db.insert(TABLE_TERMS, null, values);
+		Long id = db.insert(TABLE_TERMS, null, values);
 		db.close(); // Closing database connection
+		return id;
 	}
 
-	public void addItem(Item item, String term, Long catalog_id) {
+	@Override
+	public Long addItem(Item item) {
 		SQLiteDatabase db = this.getWritableDatabase();
-
 		ContentValues itemValues = new ContentValues();
-		itemValues.put(FIELD_UNIQUE_ID, item.getId()); // Catalog id
-		itemValues.put(FIELD_ITEM_CONTEXT, item.getComment()); // Catalog
-																// parent_id
-		itemValues.put(FIELD_ITEM_PATH, item.getPath()); // Contact name
-		// Inserting Row
-		db.insert(TABLE_ITEMS, null, itemValues);
-
-		ContentValues dataValues = new ContentValues();
-		String emtyPointer = null;
-		dataValues.put(FIELD_UNIQUE_ID, emtyPointer); // Catalog id
-		dataValues.put(FIELD_DATA_ITEM_ID, item.getId()); // Catalog parent_id
-		Term termEntry = findTermByName(term);
-		dataValues.put(FIELD_DATA_TERM_ID, termEntry.getId()); // Contact name
-		dataValues.put(FIELD_DATA_CATALOG_ID, catalog_id);
-		// Inserting Row
-		db.insert(TABLE_DATA, null, dataValues);
-
-		db.close(); // Closing database connection
+		itemValues.put(FIELD_UNIQUE_ID, item.getId());
+		itemValues.put(FIELD_ITEM_CONTEXT, item.getComment()); // item context
+		itemValues.put(FIELD_ITEM_PATH, item.getPath()); // item path
+		Long id = db.insert(TABLE_ITEMS, null, itemValues);
+		db.close();
+		return id;
 	}
 
 	@Override
@@ -196,16 +187,18 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 				+ FIELD_CATALOG_PARENT_ID + " INTEGER," + FIELD_CATALOG_NAME
 				+ " TEXT, " + FIELD_CATALOG_WEIGHT + " INTEGER" + ")";
 		String CREATE_TERM_TABLE = "CREATE TABLE " + TABLE_TERMS + "("
-				+ FIELD_UNIQUE_ID + " INTEGER PRIMARY KEY," + FIELD_TERM_NAME
-				+ " TEXT, " + FIELD_TERM_WEIGHT + " INTEGER" + ")";
+				+ FIELD_UNIQUE_ID + " INTEGER PRIMARY KEY," 
+				+ FIELD_TERM_NAME + " TEXT UNIQUE NOT NULL, " 
+				+ FIELD_TERM_WEIGHT + " INTEGER" + ")";
 		String CREATE_ITEM_TABLE = "CREATE TABLE " + TABLE_ITEMS + "("
-				+ FIELD_UNIQUE_ID + " INTEGER PRIMARY KEY," + FIELD_ITEM_PATH
-				+ " TEXT, " + FIELD_ITEM_CONTEXT + " TEXT" + ")";
-
+				+ FIELD_UNIQUE_ID + " INTEGER PRIMARY KEY," 
+				+ FIELD_ITEM_PATH + " TEXT UNIQUE NOT NULL, " 
+				+ FIELD_ITEM_CONTEXT + " TEXT" + ")";
 		String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
 				+ FIELD_UNIQUE_ID + " INTEGER PRIMARY KEY,"
-				+ FIELD_DATA_ITEM_ID + " INTEGER, " + FIELD_DATA_TERM_ID
-				+ " INTEGER, " + FIELD_DATA_CATALOG_ID + " INTEGER" + ")";
+				+ FIELD_DATA_ITEM_ID + " INTEGER, " 
+				+ FIELD_DATA_TERM_ID + " INTEGER, " 
+				+ FIELD_DATA_CATALOG_ID + " INTEGER" + ")";
 
 		db.execSQL(CREATE_CATALOG_TABLE);
 		db.execSQL(CREATE_TERM_TABLE);
@@ -224,12 +217,12 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
 			// Create tables again
 			onCreate(db);
-			fillTestData();
+//			fillTestData();
 		}
 	}
 
 	@Override
-	public void addCatalog(Catalog catalog) {
+	public Long addCatalog(Catalog catalog) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(FIELD_UNIQUE_ID, catalog.getId()); // Catalog id
@@ -238,8 +231,9 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 		values.put(FIELD_CATALOG_NAME, catalog.getName()); // Contact name
 		values.put(FIELD_CATALOG_WEIGHT, catalog.getWeight()); // Contact weight
 		// Inserting Row
-		db.insert(TABLE_CATALOGS, null, values);
+		Long id = db.insert(TABLE_CATALOGS, null, values);
 		db.close(); // Closing database connection
+		return id;
 	}
 
 	@Override
@@ -293,17 +287,53 @@ public class DBDataProvider extends SQLiteOpenHelper implements IDataProvider {
 		addTerm(new Term(Long.valueOf(5), "123", null));
 		addTerm(new Term(Long.valueOf(6), "1", null));
 
-		addItem(new Item(Long.valueOf(1), "path1", "item1"), "test",
-				Long.valueOf(1));
-		addItem(new Item(Long.valueOf(2), "path2", "item2"), "test",
-				Long.valueOf(1));
-		addItem(new Item(Long.valueOf(3), "path3", "item3"), "testing",
-				Long.valueOf(1));
-		addItem(new Item(Long.valueOf(4), "path4", "item4"), "testing",
-				Long.valueOf(1));
-		addItem(new Item(Long.valueOf(5), "path5", "item5"), "ttt",
-				Long.valueOf(2));
-		addItem(new Item(Long.valueOf(6), "path6", "item6"), "1",
-				Long.valueOf(2));
+		addItem(new Item(Long.valueOf(1), "path1", "item1"));
+		addItem(new Item(Long.valueOf(2), "path2", "item2"));
+		addItem(new Item(Long.valueOf(3), "path3", "item3"));
+		addItem(new Item(Long.valueOf(4), "path4", "item4"));
+		addItem(new Item(Long.valueOf(5), "path5", "item5"));
+		addItem(new Item(Long.valueOf(6), "path6", "item6"));
+		
+		addData(Long.valueOf(1), Long.valueOf(1), Long.valueOf(1));
+		addData(Long.valueOf(2), Long.valueOf(1), Long.valueOf(1));
+		addData(Long.valueOf(3), Long.valueOf(2), Long.valueOf(1));
+		addData(Long.valueOf(4), Long.valueOf(2), Long.valueOf(1));		
+		addData(Long.valueOf(5), Long.valueOf(4), Long.valueOf(2));		
+		addData(Long.valueOf(6), Long.valueOf(6), Long.valueOf(2));		
+	}
+
+	@Override
+	public Item findItemByFileURI(String fileUri) {
+		String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE "
+				+ FIELD_ITEM_PATH + "= ?";
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { fileUri });
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			Item itemEntry = new Item();
+			itemEntry.setId(Long.parseLong(cursor.getString(0)));
+			itemEntry.setPath(cursor.getString(1));
+			if (cursor.getString(2) != null && !cursor.getString(2).equals(""))
+				itemEntry.setComment(cursor.getString(2));
+			return itemEntry;
+		}
+		return null;
+	}
+
+	@Override
+	public Long addData(Long item_id, Long term_id, Long catalog_id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues dataValues = new ContentValues();
+		String emtyPointer = null;
+		dataValues.put(FIELD_UNIQUE_ID, emtyPointer); // Catalog id
+		dataValues.put(FIELD_DATA_ITEM_ID, item_id); // Catalog parent_id
+		dataValues.put(FIELD_DATA_TERM_ID, term_id); // Contact name
+		dataValues.put(FIELD_DATA_CATALOG_ID, catalog_id);
+		// Inserting Row
+		Long id = db.insert(TABLE_DATA, null, dataValues);
+		db.close(); // Closing database connection
+		return id;
 	}
 }

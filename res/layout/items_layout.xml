@@ -11,13 +11,22 @@
         android:layout_marginTop="4px"
         android:src="@drawable/ic_ofd_file" >
     </ImageView>
-
-    <TextView
-        android:id="@+id/item_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@+id/label"
-         > <!-- android:textSize="20px" -->
-    </TextView>
-
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/item_file_uri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold">
+        </TextView>
+        <TextView
+            android:id="@+id/item_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        </TextView>
+    </LinearLayout>
 </LinearLayout>

@@ -7,6 +7,8 @@ import great.team.db.IDataProvider;
 import great.team.dialogs.OpenFileDialog;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
+import great.team.entity.Item;
+import great.team.entity.Term;
 import great.team.interfaces.ICatalogSetter;
 
 import java.io.File;
@@ -32,7 +34,8 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 	Button mBtnOpenFileDialog;
 	TextView mTvSelectedCatalog;
 	OpenFileDialog mOpenFileDialog;
-	TextView mTvItemTags;
+	TextView mTvItemTerms;
+	TextView mTvItemComment;
 	Button mBtnSaveItems;
 	IDataProvider mDataProvider;
 
@@ -63,8 +66,8 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 		mLstSelectedFilePaths = (ListView) findViewById(R.id.lst_selected_file_paths);
 		mLstSelectedFilePaths.setAdapter(mSelectedFilePathAdapter);
 
-
-		mTvItemTags = (TextView) findViewById(R.id.edt_item_tags);
+		mTvItemComment = (TextView) findViewById(R.id.edt_item_comment);
+		mTvItemTerms = (TextView) findViewById(R.id.edt_item_tags);
 		mBtnSaveItems = (Button)findViewById(R.id.btnSaveItems);
 		mBtnSaveItems.setOnClickListener(this);
 		
@@ -142,16 +145,34 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 				ex.printStackTrace();
 			}
 		} else if(v == mBtnSaveItems){
-			String strItemTags = mTvItemTags.getText().toString();
-			if(strItemTags == null  || strItemTags.isEmpty() || mSelectedFilePathAdapter.getCount() == 0 || mCurrentCatalog == null)
+			String strItemTerms = mTvItemTerms.getText().toString();
+			if(strItemTerms == null  || strItemTerms.isEmpty() || mSelectedFilePathAdapter.getCount() == 0 || mCurrentCatalog == null)
 				return;
-			String itemTags []= strItemTags.trim().split("\\s*,\\s*");
-			for(int i = 0; i < itemTags.length; i ++){
+			String itemTerms []= strItemTerms.trim().split("\\s*,\\s*");
+			for(int i = 0; i < itemTerms.length; i ++){
 				for(int j = 0; j < mSelectedFilePathAdapter.getCount(); j++){
-					String test1 = itemTags[i];
-					String test2 = mSelectedFilePathAdapter.getItem(j);
-					Log.d(this.toString(), "catalog: " + mCurrentCatalog + " tag: " + test1 + " filePath: " + test2 );
-					//mDataProvider.addItem(item, term, catalog_id);
+					String strTermName = itemTerms[i];
+					String strFilePath = mSelectedFilePathAdapter.getItem(j);
+					
+					Long term_id = null;
+					Term term = mDataProvider.findTermByName(strTermName);
+					if(term == null){
+						Term newTerm = new Term(null, strTermName, null);
+						term_id = mDataProvider.addTerm(newTerm);
+					}
+					else 
+						term_id = term.getId();
+					Log.d(this.toString(), "catalog: " + mCurrentCatalog + " tag: " + strTermName + " filePath: " + strFilePath );
+					
+					Long item_id = null;
+					Item item = mDataProvider.findItemByFileURI(strFilePath);
+					if(item == null){
+						Item newItem = new Item(null, strFilePath, "comment");
+						item_id = mDataProvider.addItem(newItem);
+					} else 
+						item_id = item.getId();
+
+					mDataProvider.addData(item_id, term_id, mCurrentCatalog.getId());
 				}
 			}
 			
