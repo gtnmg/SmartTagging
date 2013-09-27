@@ -14,5 +14,6 @@
     <string name="title_activity_add_tag">AddTagActivity</string>
     <string name="title_activity_android_tab_layout">AndroidTabLayoutActivity</string>
     <string name="title_activity_main_tab_layout">MainTabLayoutActivity</string>
+    <string name="title_activity_edit_catalog">EditCatalogActivity</string>
 
 </resources>

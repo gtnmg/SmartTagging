@@ -14,8 +14,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <!--  not used yet -->
-		<activity
+        <!-- not used yet -->
+        <activity
             android:name="great.team.activities.MainViewActivity"
             android:label="@string/title_activity_catalog_overview" >
         </activity>
@@ -33,32 +33,43 @@
             android:parentActivityName="great.team.activities.MainViewActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="great.team.activities.AddTagActivity"
             android:label="@string/title_activity_add_tag" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="great.team.MainViewActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
-		    <intent-filter>
-		        <action android:name="android.intent.action.SEND" />
-		        <category android:name="android.intent.category.DEFAULT" />
-		        <data android:mimeType="text/plain" />
-		    </intent-filter>            
-		</activity>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="great.team.EditCatalogActivity"
+            android:label="@string/title_activity_edit_catalog" >
+        </activity>
     </application>
 
 </manifest>
