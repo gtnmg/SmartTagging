@@ -7,7 +7,6 @@ import great.team.db.IDataProvider;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
 import great.team.interfaces.ICatalogSetter;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -56,7 +54,7 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 		mBtnCancelCatalogSelection.setOnClickListener(this);
 		mBtnSelectCatalog.setOnClickListener(this);
 
-		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
+		/*IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
 		String[] strTerms = dataProvider.getTerms(null);
 		
 		mAutocompleteTerms = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
@@ -65,7 +63,7 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 		mBtnSearchTerm.setOnClickListener(this);
 
 		mAutocompleteTerms.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, strTerms));
+				android.R.layout.simple_dropdown_item_1line, strTerms));*/
 	}
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +99,7 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		ActionBar bar = getActionBar();
+//		ActionBar bar = getActionBar();
 //		bar.setBackgroundDrawable(new ColorDrawable(Color.BLUE));
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main_tab_layout, menu);

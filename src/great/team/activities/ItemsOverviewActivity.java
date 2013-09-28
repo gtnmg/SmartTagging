@@ -13,9 +13,6 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ListView;
 
 public class ItemsOverviewActivity extends Activity  implements View.OnClickListener{ 
@@ -43,30 +40,11 @@ public class ItemsOverviewActivity extends Activity  implements View.OnClickList
 		itemList = dataProvider.getItems( mCatalog , mTermId );
 		ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
 		itemsListView.setAdapter(itemsArrayAdapter);
-
-		String[] strTerms = dataProvider.getTerms(mCatalog);
-		AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
-		autoComplete.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, strTerms));
-
-		Button searchTermBtn = (Button) findViewById(R.id.search_term_button);
-		searchTermBtn.setOnClickListener(this);
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-			case R.id.search_term_button:
-				AutoCompleteTextView autoComplete = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
-				String termName = autoComplete.getText().toString();
-				IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
-				Term term = dataProvider.findTermByName(termName);
-				if(term !=null)
-					mTermId = term.getId();
-				itemList = dataProvider.getItems( mCatalog , mTermId );
-				ItemsArrayAdapter itemsArrayAdapter = new ItemsArrayAdapter(this, itemList);
-				itemsListView.setAdapter(itemsArrayAdapter);
-				break;
 		}
 	}
 
