@@ -6,9 +6,12 @@ import great.team.entity.Term;
 
 import java.util.List;
 
+import android.database.sqlite.SQLiteDatabase;
+
 public interface IDataProvider {
 	public void openDataBase();
 	public void closeDataBase();
+	public SQLiteDatabase getDataBase();
 	
 	public List<Item> getItems(Catalog cat, Long term_id);
 	public Item getItem(Long item_id);

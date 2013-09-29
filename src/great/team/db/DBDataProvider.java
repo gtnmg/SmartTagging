@@ -21,16 +21,22 @@ public class DBDataProvider implements IDataProvider {
 	public DBDataProvider(Context context) {
 		mContext = context;
 		mDBHelper = new DBHelper(context);
+		openDataBase();
 		//fillTestData();
 	}
 	
 	public void openDataBase(){
-		mDB = mDBHelper.getWritableDatabase();	
+		if(mDB == null || !mDB.isOpen());
+			mDB = mDBHelper.getWritableDatabase();
 	}
 	
 	public void closeDataBase(){
 		mDB.close();
 		mDBHelper.close();
+	}
+	
+	public SQLiteDatabase getDataBase(){
+		return mDB;
 	}
 
 	@Override

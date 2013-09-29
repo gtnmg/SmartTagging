@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -54,16 +55,16 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 		mBtnCancelCatalogSelection.setOnClickListener(this);
 		mBtnSelectCatalog.setOnClickListener(this);
 
-		/*IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
+		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
 		String[] strTerms = dataProvider.getTerms(null);
 		
 		mAutocompleteTerms = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
 		
-		mBtnSearchTerm = (Button) findViewById(R.id.search_term_button);
-		mBtnSearchTerm.setOnClickListener(this);
+		//mBtnSearchTerm = (Button) findViewById(R.id.search_term_button);
+		//mBtnSearchTerm.setOnClickListener(this);
 
 		mAutocompleteTerms.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, strTerms));*/
+				android.R.layout.simple_dropdown_item_1line, strTerms));
 	}
 
 	protected void onCreate(Bundle savedInstanceState) {

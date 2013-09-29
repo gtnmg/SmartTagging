@@ -16,9 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -110,7 +114,8 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 	void handleSendImage(Intent intent) {
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
 	    if (imageUri != null) {
-			if(addUriToFileList(imageUri.getPath()))
+			String absFilePath = getRealPathFromImageURI(imageUri);
+			if(addUriToFileList(absFilePath))
 				mSelectedFilePathAdapter.notifyDataSetChanged();
 	    }
 	}
@@ -120,12 +125,22 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 	    if (imageUris != null) {
 			boolean bImagesAdded = false;
 			for(Uri imageUri : imageUris){
-				if(addUriToFileList(imageUri.getPath()))
+				String absFilePath = getRealPathFromImageURI(imageUri);
+				if(addUriToFileList(absFilePath))
 					bImagesAdded = true;
 			}
 			if(bImagesAdded)
 				mSelectedFilePathAdapter.notifyDataSetChanged();
 	    }
+	}
+	
+	private String getRealPathFromImageURI(Uri contentUri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
+		Cursor cursor = loader.loadInBackground();
+		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
 
 	@Override
@@ -154,7 +169,8 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 					String strTermName = itemTerms[i];
 					String strFilePath = mSelectedFilePathAdapter.getItem(j);
 					
-					mDataProvider.openDataBase();
+					SQLiteDatabase db = mDataProvider.getDataBase();
+					db.beginTransaction();
 					try{
 						Long term_id = null;
 						Term term = mDataProvider.findTermByName(strTermName);
@@ -175,11 +191,12 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 							item_id = item.getId();
 	
 						mDataProvider.addData(item_id, term_id, mCurrentCatalog.getId());
+						db.setTransactionSuccessful();
 						startMainActivity();
 					} catch(Exception ex){
 						ex.printStackTrace();
 					} finally{
-						mDataProvider.closeDataBase();
+						db.endTransaction();
 					}
 				}
 			}

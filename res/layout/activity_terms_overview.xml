@@ -36,7 +36,14 @@
             android:layout_toLeftOf="@+id/btnCatalogSelect"
             android:text="x" />
     </RelativeLayout>
-
+    
+    <AutoCompleteTextView
+        android:id="@+id/term_autocomplete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_term_input" >
+    </AutoCompleteTextView>
+    
     <GridView
         android:id="@+id/gvTerms"
         android:layout_width="match_parent"
