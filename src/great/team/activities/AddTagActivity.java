@@ -154,25 +154,33 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 					String strTermName = itemTerms[i];
 					String strFilePath = mSelectedFilePathAdapter.getItem(j);
 					
-					Long term_id = null;
-					Term term = mDataProvider.findTermByName(strTermName);
-					if(term == null){
-						Term newTerm = new Term(null, strTermName, null);
-						term_id = mDataProvider.addTerm(newTerm);
+					mDataProvider.openDataBase();
+					try{
+						Long term_id = null;
+						Term term = mDataProvider.findTermByName(strTermName);
+						if(term == null){
+							Term newTerm = new Term(null, strTermName, null);
+							term_id = mDataProvider.addTerm(newTerm);
+						}
+						else 
+							term_id = term.getId();
+						Log.d(this.toString(), "catalog: " + mCurrentCatalog + " tag: " + strTermName + " filePath: " + strFilePath );
+						
+						Long item_id = null;
+						Item item = mDataProvider.findItemByFileURI(strFilePath);
+						if(item == null){
+							Item newItem = new Item(null, strFilePath, "comment");
+							item_id = mDataProvider.addItem(newItem);
+						} else 
+							item_id = item.getId();
+	
+						mDataProvider.addData(item_id, term_id, mCurrentCatalog.getId());
+						startMainActivity();
+					} catch(Exception ex){
+						ex.printStackTrace();
+					} finally{
+						mDataProvider.closeDataBase();
 					}
-					else 
-						term_id = term.getId();
-					Log.d(this.toString(), "catalog: " + mCurrentCatalog + " tag: " + strTermName + " filePath: " + strFilePath );
-					
-					Long item_id = null;
-					Item item = mDataProvider.findItemByFileURI(strFilePath);
-					if(item == null){
-						Item newItem = new Item(null, strFilePath, "comment");
-						item_id = mDataProvider.addItem(newItem);
-					} else 
-						item_id = item.getId();
-
-					mDataProvider.addData(item_id, term_id, mCurrentCatalog.getId());
 				}
 			}
 			
@@ -185,4 +193,10 @@ public class AddTagActivity extends Activity implements OnClickListener, ICatalo
 		if(addUriToFileList(filePath))
 			mSelectedFilePathAdapter.notifyDataSetChanged();
 	}
+	
+	void startMainActivity(){
+		Intent intent = new Intent(this, TermsOverviewActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		this.startActivity(intent);
+	}	
 }
