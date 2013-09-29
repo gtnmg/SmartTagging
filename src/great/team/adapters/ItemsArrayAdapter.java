@@ -6,29 +6,59 @@ import great.team.db.IDataProvider;
 import great.team.entity.Item;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ItemsArrayAdapter extends ArrayAdapter<Item> {
     private final Context mContext;
     private final List<Item> mItems;
     private IDataProvider mDataProvider;
+    Map <String, Bitmap> mThumbnails;
 
     public ItemsArrayAdapter(Context context, List<Item> items) {
         super(context, R.layout.items_layout,items);
         this.mContext = context;
         this.mItems = items;
         mDataProvider = DataProviderFactory.getDataProvider(mContext);
+        mThumbnails = new HashMap<String, Bitmap>();
+    }
+    
+    public Bitmap getThumbnail(ContentResolver cr, String path) throws Exception {
+    	File file = new File(path);
+    	if(!file.exists())
+    		return null;
+
+    	String fileExt = path.substring(path.lastIndexOf('.'), path.length()).toLowerCase();;
+    	if(!fileExt.equals(".jpg")) // only for jpg yet
+    		return null;
+ 
+    	if(mThumbnails.containsKey(path))
+    		return mThumbnails.get(path);
+    		
+        Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
+        if (ca != null && ca.moveToFirst()) {
+            int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
+            mThumbnails.put(path, MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null ));
+        }
+        ca.close();
+        return mThumbnails.get(path);
     }
 
     @Override
@@ -45,13 +75,23 @@ public class ItemsArrayAdapter extends ArrayAdapter<Item> {
 			@Override
 			public void onClick(View v) {
 				int curPos = (Integer) v.getTag();
-				Item curItem = mItems.get(curPos);
+//				Item curItem = mItems.get(curPos);
 //				mDataProvider.deleteItem(item_id);
 			}
 		});
 
-//      ImageView imageView = (ImageView) rowView.findViewById(R.id.item_icon); // can change image for item
         Item curItem = mItems.get(position);
+        
+		try {
+			Bitmap bMap = getThumbnail(mContext.getContentResolver(),curItem.getPath());
+			if (bMap != null) {
+				ImageView imageView = (ImageView) rowView.findViewById(R.id.item_icon); 
+				imageView.setImageBitmap(bMap);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
         tvItemComment.setText(curItem.getComment());
         tvItemFileURI.setText(curItem.getPath());
         rowView.setTag(curItem.getPath());
