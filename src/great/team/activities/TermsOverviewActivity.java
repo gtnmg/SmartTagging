@@ -7,8 +7,12 @@ import great.team.db.IDataProvider;
 import great.team.dialogs.SelectCatalogDialog;
 import great.team.entity.Catalog;
 import great.team.interfaces.ICatalogSetter;
+import great.team.preferences.Preferences;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +49,19 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 		mSelectedCatalog.setText(mCurrentCatalog == null ? "" : "Catalog:"
 				+ mCurrentCatalog.getName());
 	}
-
+	private void initDB(IDataProvider provider)
+	{
+		//check if db already filled by initial values
+		 SharedPreferences pref = getSharedPreferences(Preferences.app_name, Context.MODE_PRIVATE);
+		 boolean isAlreadyInit = pref.getBoolean(Preferences.b_db_init, false);
+		 Editor editor = pref.edit();
+		 if(!isAlreadyInit && provider!=null)
+		 {
+			 provider.initDB();
+			 editor.putBoolean(Preferences.b_db_init, true);
+			 editor.commit();
+		 }
+	}
 	private void init() {
 		mGvTerms = (GridView) findViewById(R.id.gvTerms);
 		refreshView();
@@ -56,8 +72,9 @@ public class TermsOverviewActivity extends Activity implements OnClickListener, 
 		mBtnSelectCatalog.setOnClickListener(this);
 
 		IDataProvider dataProvider = DataProviderFactory.getDataProvider(getApplicationContext());
-		String[] strTerms = dataProvider.getTerms(null);
+		initDB(dataProvider);
 		
+		String[] strTerms = dataProvider.getTerms(null);
 		mAutocompleteTerms = (AutoCompleteTextView) findViewById(R.id.term_autocomplete);
 		
 		//mBtnSearchTerm = (Button) findViewById(R.id.search_term_button);

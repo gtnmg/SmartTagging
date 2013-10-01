@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:example="http://schemas.android.com/apk/res/com.mnm.seekbarpreference" >
+
+    <great.team.preferences.CatalogEditPreference
+        android:defaultValue="20"
+        android:dialogTitle="dialog_title"
+        android:key="CatalogPreference"
+        android:persistent="true"
+        android:summary="summary"
+        android:title="dialog_title"
+	 />
+
+</PreferenceScreen>

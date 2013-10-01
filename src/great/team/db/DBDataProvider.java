@@ -195,44 +195,6 @@ public class DBDataProvider implements IDataProvider {
 		return catalogList;
 	}
 
-	public void fillTestData() {
-		openDataBase();
-		addCatalog(new Catalog(Long.valueOf(1), null, Long.parseLong("40"),
-				"foto"));
-		addCatalog(new Catalog(Long.valueOf(2), null, Long.parseLong("40"),
-				"video"));
-		addCatalog(new Catalog(Long.valueOf(3), null, Long.parseLong("40"),
-				"documents"));
-		addCatalog(new Catalog(Long.valueOf(4), null, Long.parseLong("40"),
-				"maps"));
-		addCatalog(new Catalog(Long.valueOf(5), null, Long.parseLong("40"),
-				"other")); // can place id = null
-		addCatalog(new Catalog(Long.valueOf(6), null, Long.parseLong("40"),
-				"add new"));
-
-		addTerm(new Term(Long.valueOf(1), "test", null));
-		addTerm(new Term(Long.valueOf(2), "testing", null));
-		addTerm(new Term(Long.valueOf(3), "tost", null));
-		addTerm(new Term(Long.valueOf(4), "ttt", null));
-		addTerm(new Term(Long.valueOf(5), "123", null));
-		addTerm(new Term(Long.valueOf(6), "1", null));
-
-		addItem(new Item(Long.valueOf(1), "path1", "item1"));
-		addItem(new Item(Long.valueOf(2), "path2", "item2"));
-		addItem(new Item(Long.valueOf(3), "path3", "item3"));
-		addItem(new Item(Long.valueOf(4), "path4", "item4"));
-		addItem(new Item(Long.valueOf(5), "path5", "item5"));
-		addItem(new Item(Long.valueOf(6), "path6", "item6"));
-		
-		addData(Long.valueOf(1), Long.valueOf(1), Long.valueOf(1));
-		addData(Long.valueOf(2), Long.valueOf(1), Long.valueOf(1));
-		addData(Long.valueOf(3), Long.valueOf(2), Long.valueOf(1));
-		addData(Long.valueOf(4), Long.valueOf(2), Long.valueOf(1));		
-		addData(Long.valueOf(5), Long.valueOf(4), Long.valueOf(2));		
-		addData(Long.valueOf(6), Long.valueOf(6), Long.valueOf(2));
-		closeDataBase();
-	}
-
 	@Override
 	public Item findItemByFileURI(String fileUri) {
 		String selectQuery = "SELECT  * FROM " + DBHelper.TABLE_ITEMS + " WHERE "
@@ -282,5 +244,46 @@ public class DBDataProvider implements IDataProvider {
 	@Override
 	public boolean deleteCatalog(Long catalog_id) {
 		return mDB.delete(DBHelper.TABLE_CATALOGS, DBHelper.FIELD_UNIQUE_ID + "=" + catalog_id, null) > 0;
+	}
+
+	@Override
+	public void initDB() {
+		System.out.println("#### init DB");
+		List<Catalog> list = getRootCatalogs();
+		if(list!=null && list.size()>0) // already inialized
+			return;
+		addCatalog(new Catalog(Long.valueOf(1), null, Long.parseLong("40"),
+				"foto"));
+		addCatalog(new Catalog(Long.valueOf(2), null, Long.parseLong("40"),
+				"video"));
+		addCatalog(new Catalog(Long.valueOf(3), null, Long.parseLong("40"),
+				"documents"));
+		addCatalog(new Catalog(Long.valueOf(4), null, Long.parseLong("40"),
+				"maps"));
+		addCatalog(new Catalog(Long.valueOf(5), null, Long.parseLong("40"),
+				"other")); // can place id = null
+		addCatalog(new Catalog(Long.valueOf(6), null, Long.parseLong("40"),
+				"add new"));
+
+		addTerm(new Term(Long.valueOf(1), "test", null));
+		addTerm(new Term(Long.valueOf(2), "testing", null));
+		addTerm(new Term(Long.valueOf(3), "tost", null));
+		addTerm(new Term(Long.valueOf(4), "ttt", null));
+		addTerm(new Term(Long.valueOf(5), "123", null));
+		addTerm(new Term(Long.valueOf(6), "1", null));
+
+		addItem(new Item(Long.valueOf(1), "path1", "item1"));
+		addItem(new Item(Long.valueOf(2), "path2", "item2"));
+		addItem(new Item(Long.valueOf(3), "path3", "item3"));
+		addItem(new Item(Long.valueOf(4), "path4", "item4"));
+		addItem(new Item(Long.valueOf(5), "path5", "item5"));
+		addItem(new Item(Long.valueOf(6), "path6", "item6"));
+		
+		addData(Long.valueOf(1), Long.valueOf(1), Long.valueOf(1));
+		addData(Long.valueOf(2), Long.valueOf(1), Long.valueOf(1));
+		addData(Long.valueOf(3), Long.valueOf(2), Long.valueOf(1));
+		addData(Long.valueOf(4), Long.valueOf(2), Long.valueOf(1));		
+		addData(Long.valueOf(5), Long.valueOf(4), Long.valueOf(2));		
+		addData(Long.valueOf(6), Long.valueOf(6), Long.valueOf(2));
 	}
 }

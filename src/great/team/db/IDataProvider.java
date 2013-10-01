@@ -33,4 +33,6 @@ public interface IDataProvider {
 	public boolean deleteData(Long data_id);
 	public boolean deleteCatalog(Long catalog_id);
 	
+	public void initDB();
+	
 }
